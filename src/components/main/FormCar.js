@@ -7,18 +7,18 @@ export const FormCar = () => {
 	const placaRef = useRef();
 	const tipoVehiculoRef = useRef();
 	const descripcionRef = useRef();
-	
+
 	const handleSubmit = async (e) => {
 
 		e.preventDefault();
 
 
 		const data = {
-			documentUser: numDocumentRef.current.value,
-			nombresUser: nombresRef.current.value,
-			placaUser: placaRef.current.value,
-			tipoVehiculoUser: tipoVehiculoRef.current.value,
-			descripcionUser: descripcionRef.current.value
+			userId: numDocumentRef.current.value,
+			userName: nombresRef.current.value,
+			vehicleNumber: placaRef.current.value,
+			vehicleType: tipoVehiculoRef.current.value,
+			vehicleDescription: descripcionRef.current.value
 		};
 
 		console.log(data);
