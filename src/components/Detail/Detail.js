@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchvehicles } from '../../service/service';
 
 export const Detail = () => {
+
+  //state para los vehiculos
+  const [cars, setCars] = useState([]);
+
+
+  const data = async () => {
+    const getData = await fetchvehicles();
+    setCars(getData.data);
+  }
+
+  //useeffect para traer los vehiculos que estan activos en la bd
+  useEffect(() => {
+    data();
+  }, []);
+
   return (
     <div className='flex p-6 justify-center '>
       <table className=''>
@@ -73,59 +89,67 @@ export const Detail = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 ">
-          <tr>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                19:45
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                1193126104
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                Cristian Bahamon
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                JMI28E
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                Motocicleta
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                Vivar Cool
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                10/01/2022
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <div className="text-sm font-light text-gray-900">
-                10/01/2022
-              </div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-              <button
-                type='submit'
-                className="inline-flex items-center px-3 py-2 border border-red-500 rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              // onClick={() => handleDeleteUser(person.id)}
-              >
-                Eliminar
-              </button>
-              
-            </td>
+          {cars.map((car) => (
 
-          </tr>
+            <tr key={car._id}>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                  19:45
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                  {car.userId}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                  {car.userName}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                  {car.vehicleNumber}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                  {car.vehicleType}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                  {car.vehicleDescription}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                 {car.checkInDateTime}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-light text-gray-900">
+                {car.checkOutDateTime}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <button
+                  type='submit'
+                  className="inline-flex items-center px-3 py-2 border border-red-500 rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                // onClick={() => handleDeleteUser(person.id)}
+                >
+                  Finalizar
+                </button>
+                <button
+                  // to={`/profile-edit-info/${person.id}`}
+                  className="ml-3 inline-flex items-center px-3 py-2 border border-green-500 rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Editar
+                </button>
+              </td>
+
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

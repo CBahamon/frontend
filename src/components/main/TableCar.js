@@ -1,7 +1,37 @@
+import axios from 'axios';
 import React from 'react';
 import {NavLink} from 'react-router-dom';
+import { fetchvehiclesNoActives } from '../../service/service';
 
 export const TableCar = ({cars}) => {
+
+	const url = 'http://localhost:3000/api'
+	const handleExit = async (car ) => {
+		console.log(car);
+
+		const vehicle = {
+			userId: car.userId,
+			userName: car.userName,
+			vehicleNumber: car.vehicleNumber,
+			vehicleType: car.vehicleType,
+			vehicleDescription: car.vehicleDescription,
+			checkInDateTime: car.checkInDateTime,
+			checkOutDateTime: new Date(),
+			havePlace:false
+		};
+
+		const exit = await fetchvehiclesNoActives(car._id,vehicle);
+		// const data ={
+		// 	havePlace : false
+		// }
+
+		// try{
+		// 	// await axios.put(`/vehicles/${id}`,data)
+		// 	await fetchvehiclesNoActives(id,data)
+		// }catch(e){
+		// 	console.log(e);
+		// }
+	}
 	
 	return (
 		<>
@@ -68,7 +98,7 @@ export const TableCar = ({cars}) => {
 					<tr key={car._id}>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
-								19:45
+								{car.checkInDateTime}
 							</div>
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
@@ -100,7 +130,7 @@ export const TableCar = ({cars}) => {
 								<button
 									type='submit'
 									className="inline-flex items-center px-3 py-2 border border-red-500 rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-								// onClick={() => handleDeleteUser(person.id)}
+									onClick={() => handleExit(car)}
 								>
 									Finalizar
 								</button>

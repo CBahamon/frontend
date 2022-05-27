@@ -14,23 +14,25 @@ export const FormCar = () => {
 
 		e.preventDefault();
 
-
+//arreglo de los datos del vehiculo que se registrea
 		const vehicle = {
 			userId: numDocumentRef.current.value,
 			userName: nombresRef.current.value,
 			vehicleNumber: placaRef.current.value,
 			vehicleType: tipoVehiculoRef.current.value,
-			vehicleDescription: descripcionRef.current.value
+			vehicleDescription: descripcionRef.current.value,
+			checkInDateTime: new Date(),
+			havePlace:true
 		};
 
 		try{
+			//peticion a la api y pasamos el arreglo de datos del vehiculo
 			await fetchNewVehicle(vehicle);
 
 		}catch(e){
 			console.log(e);
 		}
 
-		console.log(vehicle);
 	}
 
 
