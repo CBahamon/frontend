@@ -1,7 +1,8 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
-export const TableCar = () => {
+export const TableCar = ({cars}) => {
+	
 	return (
 		<>
 			<table className=''>
@@ -62,7 +63,9 @@ export const TableCar = () => {
 					</tr>
 				</thead>
 				<tbody className="bg-white divide-y divide-gray-200 ">
-					<tr>
+					{cars.map((car) => (
+
+					<tr key={car._id}>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
 								19:45
@@ -70,27 +73,27 @@ export const TableCar = () => {
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
-								1193126104
+								{car.userId}
 							</div>
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
-								Cristian Bahamon
+							{car.userName}
 							</div>
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
-								JMI28E
+							{car.vehicleNumber}
 							</div>
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
-								Motocicleta
+							{car.vehicleType}
 							</div>
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
 							<div className="text-sm font-light text-gray-900">
-								Vivar Cool
+								{car.vehicleDescription}
 							</div>
 						</td>
 						<td className="px-6 py-4 whitespace-nowrap">
@@ -110,6 +113,7 @@ export const TableCar = () => {
 						</td>
 
 					</tr>
+					))}
 				</tbody>
 			</table>
 		</>

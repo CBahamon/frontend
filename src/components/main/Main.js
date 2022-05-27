@@ -10,35 +10,30 @@ export const Main = () => {
   //state para los vehiculos
 	const [cars, setCars] = useState([]);
 
-  const url = 'http://localhost:3000/api';
+
+  const data = async() => {
+    // const getData = await fetch('http://localhost:3000/api/vehicles')
+    // const getData = await axios.get('http://localhost:3000/api/vehicles');
+    const getData = await fetchvehicles();
+    setCars(getData.data);
+  }
+ 
 //useeffect para traer los vehiculos que estan activos en la bd
 	useEffect(() => {
-	  const getVehicles = async () => {
-      try {
-        // const allVehicles =  await fetchvehicles();
-        const allVehicles =  await axios.get("/");
-        // setCars(allVehicles.data);
-        console.log(allVehicles);
-      }catch(e){
-          console.log(e);
-      }
-    }
-
-    getVehicles();
-	}, []);
+	
+    data();
+	}, [cars]);
 
   return (
-    <div className="bg-white">
-      <div className="max-w-2xl mx-auto py-24 px-4 grid items-center grid-cols-1 gap-y-16 gap-x-8 sm:px-6 sm:py-32 lg:max-w-7xl lg:px-8 lg:grid-cols-2">
-        
-        
-        <div>
+    <div className="bg-white  ">
+      <div className=" py-24 flex  flex-1 justify-center ">
+        <div className=''>
           <FormCar/>
         </div>
 
 
-        <div className="grid grid-cols-1 grid-rows-2 gap-2 sm:gap-6 lg:gap-8">
-          <TableCar />
+        <div className="w-auto">
+          <TableCar cars={cars}/>
         </div>
       </div>
     </div>

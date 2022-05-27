@@ -1,4 +1,6 @@
+import axios from 'axios';
 import React, { useRef } from 'react'
+import { fetchNewVehicle } from '../../service/service';
 
 export const FormCar = () => {
 
@@ -13,7 +15,7 @@ export const FormCar = () => {
 		e.preventDefault();
 
 
-		const data = {
+		const vehicle = {
 			userId: numDocumentRef.current.value,
 			userName: nombresRef.current.value,
 			vehicleNumber: placaRef.current.value,
@@ -21,7 +23,14 @@ export const FormCar = () => {
 			vehicleDescription: descripcionRef.current.value
 		};
 
-		console.log(data);
+		try{
+			await fetchNewVehicle(vehicle);
+
+		}catch(e){
+			console.log(e);
+		}
+
+		console.log(vehicle);
 	}
 
 
