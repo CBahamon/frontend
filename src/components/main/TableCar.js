@@ -1,38 +1,55 @@
-import axios from 'axios';
-import React from 'react';
-import {NavLink} from 'react-router-dom';
-import { fetchvehiclesNoActives } from '../../service/service';
+import React, { useState } from 'react';
+import { EditData } from './EditData';
+import { Modal } from './Modal';
+import {Link} from 'react-router-dom';
 
-export const TableCar = ({cars}) => {
+export const TableCar = ({ cars }) => {
 
-	const url = 'http://localhost:3000/api'
-	const handleExit = async (car ) => {
-		console.log(car);
+	const [modalOn, setModalOn] = useState(false);
+	const [precioFinal, setprecioFinal] = useState(0)
+	const [timeOut, setTimeOut] = useState('')
+	const [editData, setEditData] = useState(false)
 
-		const vehicle = {
-			userId: car.userId,
-			userName: car.userName,
-			vehicleNumber: car.vehicleNumber,
-			vehicleType: car.vehicleType,
-			vehicleDescription: car.vehicleDescription,
-			checkInDateTime: car.checkInDateTime,
-			checkOutDateTime: new Date(),
-			havePlace:false
-		};
+	const [vehicle, setVehicle] = useState([])
 
-		const exit = await fetchvehiclesNoActives(car._id,vehicle);
-		// const data ={
-		// 	havePlace : false
-		// }
+	const handleExit = async (car) => {
 
-		// try{
-		// 	// await axios.put(`/vehicles/${id}`,data)
-		// 	await fetchvehiclesNoActives(id,data)
-		// }catch(e){
-		// 	console.log(e);
-		// }
+		const horaEntrada = new Date(car.checkInDateTime);
+		const horaSalida = new Date();
+		setTimeOut(horaSalida);
+		const precio = horaSalida - horaEntrada;
+
+		let calculoPrecio = 0
+		setModalOn(true);
+		setVehicle(car)
+		//1 hora = 3600 segundos
+		//carro 3000 - 0.833 s
+		//moto 1500 -0.416 s
+		//cicla 1000 - 0.277 s
+
+		switch (car.vehicleType) {
+			case 'Automovil':
+				calculoPrecio = (precio / 300 / 60 / 60).toFixed(3);
+				setprecioFinal(calculoPrecio)
+				break;
+			case 'Motocicleta':
+				calculoPrecio = (precio / 600 / 60 / 60).toFixed(3);
+				setprecioFinal(calculoPrecio)
+				break;
+			case 'Bicicleta':
+				calculoPrecio = (precio / 1000 / 60 / 60).toFixed(3);
+				setprecioFinal(calculoPrecio)
+				break;
+			default:
+				break;
+		}
+
 	}
-	
+
+	const handleModal = () => {
+		setEditData(true)
+	}
+
 	return (
 		<>
 			<table className=''>
@@ -95,38 +112,38 @@ export const TableCar = ({cars}) => {
 				<tbody className="bg-white divide-y divide-gray-200 ">
 					{cars.map((car) => (
 
-					<tr key={car._id}>
-						<td className="px-6 py-4 whitespace-nowrap">
-							<div className="text-sm font-light text-gray-900">
-								{car.checkInDateTime}
-							</div>
-						</td>
-						<td className="px-6 py-4 whitespace-nowrap">
-							<div className="text-sm font-light text-gray-900">
-								{car.userId}
-							</div>
-						</td>
-						<td className="px-6 py-4 whitespace-nowrap">
-							<div className="text-sm font-light text-gray-900">
-							{car.userName}
-							</div>
-						</td>
-						<td className="px-6 py-4 whitespace-nowrap">
-							<div className="text-sm font-light text-gray-900">
-							{car.vehicleNumber}
-							</div>
-						</td>
-						<td className="px-6 py-4 whitespace-nowrap">
-							<div className="text-sm font-light text-gray-900">
-							{car.vehicleType}
-							</div>
-						</td>
-						<td className="px-6 py-4 whitespace-nowrap">
-							<div className="text-sm font-light text-gray-900">
-								{car.vehicleDescription}
-							</div>
-						</td>
-						<td className="px-6 py-4 whitespace-nowrap">
+						<tr key={car._id}>
+							<td className="px-6 py-4 whitespace-nowrap">
+								<div className="text-sm font-light text-gray-900">
+									{car.checkInDateTime}
+								</div>
+							</td>
+							<td className="px-6 py-4 whitespace-nowrap">
+								<div className="text-sm font-light text-gray-900">
+									{car.userId}
+								</div>
+							</td>
+							<td className="px-6 py-4 whitespace-nowrap">
+								<div className="text-sm font-light text-gray-900">
+									{car.userName}
+								</div>
+							</td>
+							<td className="px-6 py-4 whitespace-nowrap">
+								<div className="text-sm font-light text-gray-900">
+									{car.vehicleNumber}
+								</div>
+							</td>
+							<td className="px-6 py-4 whitespace-nowrap">
+								<div className="text-sm font-light text-gray-900">
+									{car.vehicleType}
+								</div>
+							</td>
+							<td className="px-6 py-4 whitespace-nowrap">
+								<div className="text-sm font-light text-gray-900">
+									{car.vehicleDescription}
+								</div>
+							</td>
+							<td className="px-6 py-4 whitespace-nowrap">
 								<button
 									type='submit'
 									className="inline-flex items-center px-3 py-2 border border-red-500 rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -134,15 +151,22 @@ export const TableCar = ({cars}) => {
 								>
 									Finalizar
 								</button>
-								<button
+
+								{modalOn && <Modal setModalOn={setModalOn} precioFinal={precioFinal} vehicle={vehicle} timeOut={timeOut}/>}
+
+								<Link
 									// to={`/profile-edit-info/${person.id}`}
 									className="ml-3 inline-flex items-center px-3 py-2 border border-green-500 rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+									// onClick={() => handleModal(car)}
+									to={`/delete/${car._id}`}
 								>
 									Editar
-								</button>
-						</td>
+								</Link>
 
-					</tr>
+								{/* {editData && <EditData setEditData={setEditData} car={car}/>} */}
+							</td>
+
+						</tr>
 					))}
 				</tbody>
 			</table>

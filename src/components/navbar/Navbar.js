@@ -35,8 +35,8 @@ export const Navbar = () => {
 							<div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
 								<div className="flex-shrink-0 flex items-center">
 									<img
-										className="hidden lg:block h-8 w-auto"
-										src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg"
+										className="hidden lg:block h-8 w-auto bg-white"
+										src="https://img.icons8.com/ios/100/000000/parking.png"
 										alt="Workflow"
 									/>
 								</div>

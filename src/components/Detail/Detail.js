@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchvehicles } from '../../service/service';
+import {  fetchvehiclesActivesData, fetchvehiclesDelete } from '../../service/service';
 
 export const Detail = () => {
 
@@ -8,7 +8,7 @@ export const Detail = () => {
 
 
   const data = async () => {
-    const getData = await fetchvehicles();
+    const getData = await fetchvehiclesActivesData();
     setCars(getData.data);
   }
 
@@ -16,6 +16,19 @@ export const Detail = () => {
   useEffect(() => {
     data();
   }, []);
+
+  const handleDeleteVehicle = async (car) => {
+
+    const data = {
+			...car,
+      status:false
+    }
+
+    fetchvehiclesDelete(car._id, data);
+    window.location.reload();
+
+    console.log(data);
+  }
 
   return (
     <div className='flex p-6 justify-center '>
@@ -34,7 +47,7 @@ export const Detail = () => {
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              H. Entrada
+              N.
             </th>
             <th
               scope="col"
@@ -89,12 +102,12 @@ export const Detail = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 ">
-          {cars.map((car) => (
+          {cars.map((car,index) => (
 
             <tr key={car._id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm font-light text-gray-900">
-                  19:45
+                  {index + 1}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
@@ -136,16 +149,11 @@ export const Detail = () => {
                 <button
                   type='submit'
                   className="inline-flex items-center px-3 py-2 border border-red-500 rounded-md shadow-sm text-sm font-medium text-white bg-red-500 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                // onClick={() => handleDeleteUser(person.id)}
+                onClick={() => handleDeleteVehicle(car)}
                 >
-                  Finalizar
+                  Eliminar
                 </button>
-                <button
-                  // to={`/profile-edit-info/${person.id}`}
-                  className="ml-3 inline-flex items-center px-3 py-2 border border-green-500 rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Editar
-                </button>
+               
               </td>
 
             </tr>

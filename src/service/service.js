@@ -45,3 +45,36 @@ export const fetchvehiclesNoActives = async (id,data) => {
         console.log(e)
     }
 }
+
+//cambiar el estado de un vehiculo para que no se muestre la informacion "eliminar"
+
+export const fetchvehiclesDelete = async (id,data) => {
+    try {
+        const deleteVehicle = await axios.put(`${url}/vehicles/delete/${id}`, data);
+        return deleteVehicle;
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+
+//traer solo los vehiculos activos que no han sido "eliminados"
+export const fetchvehiclesActivesData = async () => {
+    try {
+        const allVehiclesActiveData = await axios.get(`${url}/vehicles/activeData`);
+        return allVehiclesActiveData;
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+//traer un solo vehiculo 
+export const fetchGetOneVehicle = async (id) => {
+    try {
+        const getOneVehicle = await axios.get(`${url}/vehicles/${id}`);
+        return getOneVehicle;
+    } catch (e) {
+        console.log(e)
+    }
+}
+
