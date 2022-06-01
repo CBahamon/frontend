@@ -46,7 +46,7 @@ export const FormCar = () => {
 				//peticion a la api y pasamos el arreglo de datos del vehiculo
 				await fetchNewVehicle(vehicle);
 				window.location.reload();
-				setAlert(true);
+				setAlert(false);
 			} catch (e) {
 				console.log(e);
 			}

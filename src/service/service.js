@@ -78,3 +78,14 @@ export const fetchGetOneVehicle = async (id) => {
     }
 }
 
+
+//cambiar el estado de un vehiculo para que no se muestre la informacion "eliminar"
+
+export const fetchDeleteRegister = async (id,data) => {
+    try {
+        const deleteVehicle = await axios.put(`${url}/vehicles/deleteRegister/${id}`, data);
+        return deleteVehicle;
+    } catch (e) {
+        console.log(e)
+    }
+}

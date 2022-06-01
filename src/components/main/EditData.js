@@ -1,19 +1,28 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 
-import { fetchGetOneVehicle } from '../../service/service'
-import { useParams} from 'react-router-dom';
+import { fetchDeleteRegister, fetchGetOneVehicle } from '../../service/service'
+import {useNavigate, useParams } from 'react-router-dom';
 
 export const EditData = () => {
 
-	const {idVehicle} = useParams();
-	const [oneVehicle, setOneVehicle] = useState([])
+
+	
+    const navigate = useNavigate();
+	const { idVehicle } = useParams();
+	const [oneVehicle, setOneVehicle] = useState({
+		userId: '',
+		userName: '',
+		vehicleNumber: '',
+		vehicleType: '',
+		vehicleDescription: '',
+	})
 	
 
 	const getData = async () => {
-		try{
+		try {
 			const vehicle = await fetchGetOneVehicle(idVehicle)
 			setOneVehicle(vehicle.data)
-		}catch(e){
+		} catch (e) {
 			console.log(e);
 		}
 	}
@@ -23,23 +32,50 @@ export const EditData = () => {
 	}, [])
 
 
+	const handleChange = (e) => {
+
+		const name = e.target.name;
+
+		const newData = {};
+
+		if (name.endsWith('_id')) newData[name.split('_')[0]] = { id: e.target.value }
+
+		newData[name] = e.target.value
+
+		setOneVehicle({
+			...oneVehicle,
+			...newData
+		})
+	}
+
+
 	const numDocumentRef = useRef();
 	const nombresRef = useRef();
 	const placaRef = useRef();
 	const tipoVehiculoRef = useRef();
 	const descripcionRef = useRef();
 
-	const handleEdit = async () => {
+	const handleEdit = async (e) => {
 
-		const vehicle = {
-			userId: numDocumentRef.current.value,
-			userName: nombresRef.current.value,
-			vehicleNumber: placaRef.current.value,
-			vehicleType: tipoVehiculoRef.current.value,
-			vehicleDescription: descripcionRef.current.value,
-		};
+		e.preventDefault();
 
-		console.log(vehicle);
+		try{
+			const vehicle = {
+				userId: numDocumentRef.current.value,
+				userName: nombresRef.current.value,
+				vehicleNumber: placaRef.current.value,
+				vehicleType: tipoVehiculoRef.current.value,
+				vehicleDescription: descripcionRef.current.value,
+			};
+			await fetchDeleteRegister(idVehicle,oneVehicle)
+			console.log(vehicle);
+
+			navigate('/', {
+                replace: true
+            });
+		}catch(e){
+			console.log(e);
+		}
 	}
 
 	return (
@@ -60,6 +96,8 @@ export const EditData = () => {
 												className=" w-full px-3 py-2 border-b-2 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-blue-500  sm:text-sm" placeholder="Numero De Documento"
 												ref={numDocumentRef}
 												value={oneVehicle.userId}
+												onChange={handleChange}
+												name="userId"
 											/>
 
 										</div>
@@ -72,6 +110,8 @@ export const EditData = () => {
 												className=" w-full px-3 py-2 border-b-2 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-blue-500  sm:text-sm" placeholder="Nombres"
 												ref={nombresRef}
 												value={oneVehicle.userName}
+												onChange={handleChange}
+												name="userName"
 											/>
 										</div>
 
@@ -83,6 +123,8 @@ export const EditData = () => {
 												className=" w-full px-3 py-2 border-b-2 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-blue-500  sm:text-sm" placeholder="Placa"
 												ref={placaRef}
 												value={oneVehicle.vehicleNumber}
+												onChange={handleChange}
+												name="vehicleNumber"
 											/>
 										</div>
 
@@ -91,12 +133,11 @@ export const EditData = () => {
 												Tipo de Vehiculo
 											</label>
 											<select
-												id="country"
-												name="country"
-												autoComplete="country-name"
 												className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 												ref={tipoVehiculoRef}
 												value={oneVehicle.vehicleType}
+												onChange={handleChange}
+												name="vehicleType"
 											>
 												<option value='Motocicleta'>Motocicleta</option>
 												<option value='Automovil'>Automovil</option>
@@ -112,6 +153,8 @@ export const EditData = () => {
 												className=" w-full px-3 py-2 border-b-2 border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-blue-500  sm:text-sm" placeholder="Descripcion del Vehiculo"
 												ref={descripcionRef}
 												value={oneVehicle.vehicleDescription}
+												onChange={handleChange}
+												name="vehicleDescription"
 											/>
 										</div>
 
